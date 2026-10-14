@@ -1,0 +1,51 @@
+name: test
+
+# Proves every formula in this checkout installs, runs and passes audit on both
+# macOS architectures. Runs on pull requests and on pushes to main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Formulas match the latest verified releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/generate.py --check
+
+  formulas:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tap this checkout as scbrown/tap
+        run: |
+          taps="$(brew --repository)/Library/Taps/scbrown"
+          mkdir -p "$taps"
+          ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
+      - name: Install, test and audit every formula
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
+        run: |
+          set -eu
+          for f in Formula/*.rb; do
+            name="$(basename "$f" .rb)"
+            echo "::group::$name"
+            brew install "scbrown/tap/$name"
+            brew test "scbrown/tap/$name"
+            brew audit --strict "scbrown/tap/$name"
+            scripts/check-installed.py "scbrown/tap/$name"
+            echo "::endgroup::"
+          done
