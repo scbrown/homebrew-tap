@@ -1,0 +1,19 @@
+name: bootstrap
+
+# The first CI for this tap: proves pushes to main are checked, so later pull
+# requests have a green base. The formula tests arrive with the generator change.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Repository files are present
+        run: test -f README.md && test -f LICENSE
