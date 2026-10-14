@@ -31,6 +31,13 @@ jobs:
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+      - name: Prepare the runner's Python
+        # GitHub's Intel macOS image ships a non-Homebrew Python that owns files
+        # under /usr/local/bin, so python@3.13 cannot link there. This only
+        # affects the throwaway runner; it is not part of any formula.
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install python@3.13 || brew link --overwrite python@3.13
       - name: Install, test and audit changed formulas
         if: steps.gen.outputs.changed == 'true'
         env:
