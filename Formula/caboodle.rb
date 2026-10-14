@@ -5,7 +5,6 @@
 class Caboodle < Formula
   desc "Compose and verify the stack of agent tools"
   homepage "https://github.com/scbrown/caboodle"
-  version "0.2.22"
   license "MIT"
 
   on_macos do

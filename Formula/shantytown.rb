@@ -7,7 +7,6 @@ class Shantytown < Formula
   homepage "https://github.com/scbrown/shantytown"
   url "https://github.com/scbrown/shantytown/releases/download/v0.7.0/shantytown-0.7.0-py3-none-any.whl", using: :nounzip
   sha256 "1d5b459b886edf2e007faade1f094a682bc425264ee8a03ae338fca7da102bfb"
-  version "0.7.0"
   license "MIT"
 
   depends_on "python@3.13"

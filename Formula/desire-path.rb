@@ -5,7 +5,6 @@
 class DesirePath < Formula
   desc "Record and replay the paths agents actually take"
   homepage "https://github.com/scbrown/desire-path"
-  version "0.7.1"
   license "MIT"
 
   on_macos do

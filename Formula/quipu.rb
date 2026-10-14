@@ -5,7 +5,6 @@
 class Quipu < Formula
   desc "Knowledge graph server and client for agent crews"
   homepage "https://github.com/scbrown/quipu"
-  version "0.13.0"
   license "MIT"
 
   on_macos do

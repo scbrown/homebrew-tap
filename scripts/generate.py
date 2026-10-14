@@ -127,7 +127,7 @@ def render(name, row, ver, rows):
         lines += [
             f'  url "{url}", using: :nounzip',
             f'  sha256 "{sha}"',
-            f'  version "{ver}"',
+            *([f'  version "{ver}"'] if row.get("explicit_version") else []),
             f'  license "{row["license"]}"',
             "",
             '  depends_on "python@3.13"',
@@ -149,7 +149,7 @@ def render(name, row, ver, rows):
     else:
         by = dict((k, (u, s)) for k, u, s in rows)
         lines += [
-            f'  version "{ver}"',
+            *([f'  version "{ver}"'] if row.get("explicit_version") else []),
             f'  license "{row["license"]}"',
             "",
             "  on_macos do",

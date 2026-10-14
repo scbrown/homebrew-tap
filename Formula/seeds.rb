@@ -5,7 +5,6 @@
 class Seeds < Formula
   desc "Work-item tracker backed by Quipu"
   homepage "https://github.com/scbrown/seeds"
-  version "0.3.0"
   license "MIT"
 
   on_macos do
