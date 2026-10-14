@@ -1,0 +1,111 @@
+{
+  "_comment": "Data only. One row per formula. Patterns use {tag}, {ver}, {triple}, {os}, {arch}. Checksums are never stored here; they are read from each release at generation time. links: alias -> target, installed as a RELATIVE symlink in bin (caboodle verify requires qp -> quipu beside the resolved quipu).",
+  "formulas": {
+    "bobbin": {
+      "repo": "scbrown/bobbin",
+      "desc": "Repo indexing and context injection for AI agents",
+      "tag_prefix": "v",
+      "asset": "bobbin-{tag}-{triple}.tar.gz",
+      "sums": "SHA256SUMS.txt",
+      "bins": [
+        "bobbin"
+      ],
+      "libexec": true,
+      "license": "MIT",
+      "version_args": "--version"
+    },
+    "caboodle": {
+      "repo": "scbrown/caboodle",
+      "desc": "Compose and verify the stack of agent tools",
+      "tag_prefix": "v",
+      "asset": "caboodle-{tag}-{triple}.tar.gz",
+      "sums": "sidecar",
+      "bins": [
+        "caboodle"
+      ],
+      "license": "MIT",
+      "version_args": "--version"
+    },
+    "desire-path": {
+      "repo": "scbrown/desire-path",
+      "desc": "Record and replay the paths agents actually take",
+      "tag_prefix": "v",
+      "asset": "desire-path_{ver}_{os}_{arch}.tar.gz",
+      "sums": "checksums.txt",
+      "bins": [
+        "dp"
+      ],
+      "license": "MIT",
+      "version_args": "version"
+    },
+    "quipu": {
+      "repo": "scbrown/quipu",
+      "desc": "Knowledge graph server and client for agent crews",
+      "tag_prefix": "quipu-ai-v",
+      "asset": "quipu-{tag}-{triple}.tar.gz",
+      "sums": "sidecar",
+      "bins": [
+        "quipu",
+        "quipu-server"
+      ],
+      "license": "MIT",
+      "version_args": "--version",
+      "links": {
+        "qp": "quipu"
+      }
+    },
+    "seeds": {
+      "repo": "scbrown/seeds",
+      "desc": "Work-item tracker backed by Quipu",
+      "tag_prefix": "seeds-ai-v",
+      "asset": "sd-{tag}-{triple}.tar.gz",
+      "sums": "SHA256SUMS.txt",
+      "bins": [
+        "sd"
+      ],
+      "license": "MIT",
+      "version_args": "--version"
+    },
+    "yupana": {
+      "repo": "scbrown/yupana",
+      "desc": "Live per-tenant code structure: symbols, callers and impact",
+      "tag_prefix": "v",
+      "asset": "yupana-{tag}-{triple}.tar.gz",
+      "sums": "sidecar",
+      "bins": [
+        "yupana"
+      ],
+      "license": "MIT",
+      "version_args": "--version",
+      "links": {
+        "hank": "yupana"
+      }
+    },
+    "shantytown": {
+      "repo": "scbrown/shantytown",
+      "desc": "Small harness for running a crew of coding agents",
+      "kind": "python",
+      "tag_prefix": "v",
+      "asset": "shantytown-{ver}-py3-none-any.whl",
+      "sums": "SHA256SUMS",
+      "bins": [
+        "st"
+      ],
+      "license": "MIT",
+      "version_args": "--version",
+      "entry": "shantytown.cli:main"
+    }
+  },
+  "platforms": {
+    "macos-arm": {
+      "triple": "aarch64-apple-darwin",
+      "os": "darwin",
+      "arch": "arm64"
+    },
+    "macos-intel": {
+      "triple": "x86_64-apple-darwin",
+      "os": "darwin",
+      "arch": "amd64"
+    }
+  }
+}

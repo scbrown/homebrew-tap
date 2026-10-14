@@ -1,0 +1,66 @@
+name: update
+
+# Hourly: regenerate formulas from each repo's latest stable release (assets
+# verified against the release's own checksums), test them on macOS, and commit.
+# Uses only this repository's token: no credentials live in the source repos.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate formulas
+        id: gen
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/generate.py
+          if git diff --quiet -- Formula && [ -z "$(git ls-files --others -- Formula)" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Prepare the runner's Python
+        # GitHub's Intel macOS image ships a non-Homebrew Python that owns files
+        # under /usr/local/bin, so python@3.13 cannot link there. This only
+        # affects the throwaway runner; it is not part of any formula.
+        if: steps.gen.outputs.changed == 'true'
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install python@3.13 || brew link --overwrite python@3.13
+      - name: Install, test and audit changed formulas
+        if: steps.gen.outputs.changed == 'true'
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
+        run: |
+          set -eu
+          taps="$(brew --repository)/Library/Taps/scbrown"
+          mkdir -p "$taps"
+          ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
+          for f in $(git diff --name-only -- Formula; git ls-files --others -- Formula); do
+            name="$(basename "$f" .rb)"
+            brew install "scbrown/tap/$name"
+            brew test "scbrown/tap/$name"
+            brew audit --strict "scbrown/tap/$name"
+          done
+      - name: Commit
+        if: steps.gen.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula
+          names="$(git diff --cached --name-only | xargs -n1 basename | sed 's/[.]rb$//' | paste -sd, -)"
+          git commit -m "formula: update $names to latest releases"
+          git push
