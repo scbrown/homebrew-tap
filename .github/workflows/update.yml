@@ -10,6 +10,9 @@ on:
 
 permissions:
   contents: write
+  # A push made with GITHUB_TOKEN starts no workflows, so main would carry an
+  # unchecked commit. workflow_dispatch is the one event that token may start.
+  actions: write
 
 concurrency:
   group: update
@@ -64,3 +67,22 @@ jobs:
           names="$(git diff --cached --name-only | xargs -n1 basename | sed 's/[.]rb$//' | paste -sd, -)"
           git commit -m "formula: update $names to latest releases"
           git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        id: commit
+      - name: Check the pushed commit on main
+        # Formulas were already tested above; this attaches test.yml's checks to
+        # the new main commit so the next pull request has a green base.
+        if: steps.gen.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PUSHED: ${{ steps.commit.outputs.sha }}
+        run: |
+          gh workflow run test.yml --ref main
+          for i in $(seq 1 20); do
+            sleep 15
+            sha="$(gh run list --workflow test.yml --event workflow_dispatch --limit 1 --json headSha --jq '.[0].headSha')"
+            [ "$sha" = "$PUSHED" ] && { echo "test.yml dispatched for $PUSHED"; exit 0; }
+          done
+          echo "::error::test.yml was not dispatched for $PUSHED; main is unchecked"
+          exit 1
