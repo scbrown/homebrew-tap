@@ -9,11 +9,11 @@ class Caboodle < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/scbrown/caboodle/releases/download/v0.2.23/caboodle-v0.2.23-aarch64-apple-darwin.tar.gz"
+      url "https://github.com/scbrown/tambo/releases/download/v0.2.23/caboodle-v0.2.23-aarch64-apple-darwin.tar.gz"
       sha256 "5200ca44fab81ca29952232506badccb65945f2b9ddaaf72fad5975d3bd54883"
     end
     on_intel do
-      url "https://github.com/scbrown/caboodle/releases/download/v0.2.23/caboodle-v0.2.23-x86_64-apple-darwin.tar.gz"
+      url "https://github.com/scbrown/tambo/releases/download/v0.2.23/caboodle-v0.2.23-x86_64-apple-darwin.tar.gz"
       sha256 "ae9ed7062c673b21d1c2555886824965c77c519fce4e73b8b3f941981f677b8d"
     end
   end
