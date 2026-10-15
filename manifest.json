@@ -94,6 +94,26 @@
       "license": "MIT",
       "version_args": "--version",
       "entry": "shantytown.cli:main"
+    },
+    "chaski": {
+      "repo": "scbrown/chaski",
+      "desc": "Reactions and notifications when your knowledge graph changes",
+      "kind": "python-wheels",
+      "tag_prefix": "v",
+      "asset": "chaski_reactor-{ver}-py3-none-any.whl",
+      "sums": "checksums.txt",
+      "python": "3.12",
+      "license": "Apache-2.0",
+      "version_bin": "chaski",
+      "version_args": "--version",
+      "imports": {
+        "pyyaml": "yaml"
+      },
+      "bins": [
+        "chaski",
+        "chaski-event",
+        "chaski-once"
+      ]
     }
   },
   "platforms": {
