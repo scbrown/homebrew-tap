@@ -9,12 +9,12 @@ class Seeds < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/scbrown/seeds/releases/download/seeds-ai-v0.3.0/sd-seeds-ai-v0.3.0-aarch64-apple-darwin.tar.gz"
-      sha256 "3db04ed0550189ed0126b0b15ad7067007a6871fb7d7911ca14022e01044e546"
+      url "https://github.com/scbrown/seeds/releases/download/seeds-ai-v0.4.0/sd-seeds-ai-v0.4.0-aarch64-apple-darwin.tar.gz"
+      sha256 "3bb10f5de82fedc78b991cc97891a05645baf84209f835ab2a3c6b47325ca3a4"
     end
     on_intel do
-      url "https://github.com/scbrown/seeds/releases/download/seeds-ai-v0.3.0/sd-seeds-ai-v0.3.0-x86_64-apple-darwin.tar.gz"
-      sha256 "27d7af31e6ddfbf897a83820ac38d441a444285b5cc6c4eae7dbe659e5025377"
+      url "https://github.com/scbrown/seeds/releases/download/seeds-ai-v0.4.0/sd-seeds-ai-v0.4.0-x86_64-apple-darwin.tar.gz"
+      sha256 "5a632c512d7c8639058f74708b502c8da1cd901ca9d6facea1f23290ec001d1c"
     end
   end
 
