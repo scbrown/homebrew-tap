@@ -11,6 +11,7 @@ brew install scbrown/tap/caboodle
 | --- | --- | --- |
 | `bobbin` | `bobbin` | [scbrown/bobbin](https://github.com/scbrown/bobbin) |
 | `caboodle` | `caboodle` | [scbrown/caboodle](https://github.com/scbrown/caboodle) |
+| `chaski` | `chaski`, `chaski-event`, `chaski-once` | [scbrown/chaski](https://github.com/scbrown/chaski) |
 | `desire-path` | `dp` | [scbrown/desire-path](https://github.com/scbrown/desire-path) |
 | `quipu` | `quipu`, `quipu-server`, `qp` | [scbrown/quipu](https://github.com/scbrown/quipu) |
 | `seeds` | `sd` | [scbrown/seeds](https://github.com/scbrown/seeds) |

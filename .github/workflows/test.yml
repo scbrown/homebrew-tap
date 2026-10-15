@@ -40,7 +40,7 @@ jobs:
         # affects the throwaway runner; it is not part of any formula.
         env:
           HOMEBREW_NO_AUTO_UPDATE: "1"
-        run: brew install python@3.13 || brew link --overwrite python@3.13
+        run: for py in python@3.12 python@3.13; do brew install "$py" || brew link --overwrite "$py"; done
       - name: Install, test and audit every formula
         env:
           HOMEBREW_NO_AUTO_UPDATE: "1"
