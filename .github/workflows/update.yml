@@ -4,8 +4,11 @@ name: update
 # verified against the release's own checksums), test them on macOS, and commit.
 # Uses only this repository's token: no credentials live in the source repos.
 on:
+  # The first schedule (minute 17) never fired: zero schedule runs from 23:41Z to
+  # 03:33Z although the workflow was active. Editing the cron re-registers it;
+  # the lane counts as fixed only after one observed schedule-event run.
   schedule:
-    - cron: "17 * * * *"
+    - cron: "23 * * * *"
   workflow_dispatch:
 
 permissions:
