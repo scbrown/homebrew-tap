@@ -9,12 +9,12 @@ class DesirePath < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/scbrown/desire-path/releases/download/v0.7.1/desire-path_0.7.1_darwin_arm64.tar.gz"
-      sha256 "c095ceae8c3fb49080d37d534ccf7fc795a4469b0922d73cd6b2074776c238e5"
+      url "https://github.com/scbrown/desire-path/releases/download/v0.8.0/desire-path_0.8.0_darwin_arm64.tar.gz"
+      sha256 "f2b9ad359a0cd155e4666a6ed0f6909373c2054f3a9c8e44f5e41630d447a2cf"
     end
     on_intel do
-      url "https://github.com/scbrown/desire-path/releases/download/v0.7.1/desire-path_0.7.1_darwin_amd64.tar.gz"
-      sha256 "a614759a9225d06533b50bd856b49d51b4ffb657f130b892e7d082c629305f4d"
+      url "https://github.com/scbrown/desire-path/releases/download/v0.8.0/desire-path_0.8.0_darwin_amd64.tar.gz"
+      sha256 "4d3033a1dbe9439f85072a7e6df523ca3ec07adcbfe264932bef704aff68507e"
     end
   end
 
