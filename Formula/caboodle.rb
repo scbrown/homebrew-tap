@@ -6,6 +6,7 @@ class Caboodle < Formula
   desc "Compose and verify the stack of agent tools"
   homepage "https://github.com/scbrown/caboodle"
   license "MIT"
+  conflicts_with "caboodle-nightly", because: "both install the same commands"
 
   on_macos do
     on_arm do
