@@ -154,6 +154,9 @@ jobs:
           taps="$(brew --repository)/Library/Taps/scbrown"
           mkdir -p "$taps"
           ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
+          # The conflict declaration loads the stable formula too. Trust only
+          # that owned formula in this disposable CI runner before installation.
+          brew trust --formula scbrown/tap/caboodle
           brew install scbrown/tap/caboodle-nightly
           brew test scbrown/tap/caboodle-nightly
           scripts/check-installed.py scbrown/tap/caboodle-nightly
