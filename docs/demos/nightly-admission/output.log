@@ -1,0 +1,6 @@
+before preview class: Caboodle@nightly
+after preview class: CaboodleNightly
+stable class control: Caboodle
+stable release control: v0.3.7
+preview selection: caboodle-nightly-v0.3.7-nightly.20261017010000.aaaaaaaaaaaa
+Scope: offline generator controls; no publish, dispatch, brew or host install.

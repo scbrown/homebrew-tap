@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Stable and nightly admission controls
+        run: python3 scripts/test-nightly.py
       - name: Formulas match the latest verified releases
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -59,6 +61,9 @@ jobs:
               echo "::error::$name failed install, test, audit or receipt"
               failed="$failed $name"
             fi
+            # Stable and preview formulas intentionally own the same command.
+            # Each install is tested before unlinking it for the next formula.
+            brew unlink "scbrown/tap/$name" || true
             echo "::endgroup::"
           done
           [ -z "$failed" ] || { echo "FAILED:$failed"; exit 1; }
