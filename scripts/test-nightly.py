@@ -27,6 +27,13 @@ def release(tag, prerelease=False, draft=False):
 
 
 class ReleaseControls(unittest.TestCase):
+    def test_empty_brew_fixture_is_read_only(self):
+        fixture = Path(__file__).with_name("empty-brew-fixture.sh")
+        self.assertEqual(subprocess.run(["sh", str(fixture), "update", "--quiet"], capture_output=True).returncode, 0)
+        receipt = subprocess.run(["sh", str(fixture), "info", "--json=v2", "scbrown/tap/quipu"], capture_output=True, check=True)
+        self.assertEqual(json.loads(receipt.stdout), {"formulae": []})
+        self.assertEqual(subprocess.run(["sh", str(fixture), "install", "scbrown/tap/quipu"], capture_output=True).returncode, 93)
+
     def test_stable_never_adopts_preview_or_draft(self):
         rows = [release("v0.3.7"), release("v9.0.0", draft=True),
                 release("v9.0.0", prerelease=True), release("v0.3.8")]
