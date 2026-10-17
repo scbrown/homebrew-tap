@@ -129,7 +129,7 @@
     }
   },
   "previews": {
-    "caboodle@nightly": {
+    "caboodle-nightly": {
       "repo": "scbrown/homebrew-tap",
       "homepage_repo": "scbrown/tambo",
       "desc": "Nightly Caboodle built from an exact main commit",

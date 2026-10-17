@@ -13,7 +13,7 @@ spec = importlib.util.spec_from_file_location("generate", root / "scripts/genera
 current = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(current)
 print("before preview class:", baseline["class_name"]("caboodle@nightly"))
-print("after preview class:", current.class_name("caboodle@nightly"))
+print("after preview class:", current.class_name("caboodle-nightly"))
 print("stable class control:", current.class_name("caboodle"))
 releases = [
     {"tag_name": "v0.3.7", "draft": False, "prerelease": False},

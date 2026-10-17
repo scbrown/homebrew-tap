@@ -154,10 +154,10 @@ jobs:
           taps="$(brew --repository)/Library/Taps/scbrown"
           mkdir -p "$taps"
           ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
-          brew install scbrown/tap/caboodle@nightly
-          brew test scbrown/tap/caboodle@nightly
-          scripts/check-installed.py scbrown/tap/caboodle@nightly
-          brew uninstall scbrown/tap/caboodle@nightly
+          brew install scbrown/tap/caboodle-nightly
+          brew test scbrown/tap/caboodle-nightly
+          scripts/check-installed.py scbrown/tap/caboodle-nightly
+          brew uninstall scbrown/tap/caboodle-nightly
       - name: Publish an immutable prerelease
         if: github.event_name != 'pull_request'
         env:
@@ -176,12 +176,12 @@ jobs:
           HOMEBREW_NO_INSTALL_FROM_API: "1"
         run: |
           set -eu
-          python3 scripts/generate.py --preview caboodle@nightly
+          python3 scripts/generate.py --preview caboodle-nightly
           unset GITHUB_TOKEN
-          brew install scbrown/tap/caboodle@nightly
-          brew test scbrown/tap/caboodle@nightly
-          brew audit --strict scbrown/tap/caboodle@nightly
-          scripts/check-installed.py scbrown/tap/caboodle@nightly
+          brew install scbrown/tap/caboodle-nightly
+          brew test scbrown/tap/caboodle-nightly
+          brew audit --strict scbrown/tap/caboodle-nightly
+          scripts/check-installed.py scbrown/tap/caboodle-nightly
       - name: Commit the tested preview formula
         if: github.event_name != 'pull_request'
         env:
@@ -190,7 +190,7 @@ jobs:
           set -eu
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add Formula/caboodle@nightly.rb
+          git add Formula/caboodle-nightly.rb
           git commit -m 'formula: update verified Caboodle nightly'
           gh auth setup-git
           # A concurrent main move refuses this push; never force the formula.

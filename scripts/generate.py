@@ -248,6 +248,8 @@ def render_wheels(name, row, ver, rows, scripts, deps):
 
 def class_name(name):
     base, sep, version = name.partition("@")
+    if sep and not re.fullmatch(r"[0-9]+(?:\.[0-9]+)*", version):
+        raise Refused("Homebrew @ suffixes require a numeric version; use a -nightly name")
     return "".join(part.capitalize() for part in re.split(r"[-_]", base)) + (
         "AT" + version.replace(".", "") if sep else "")
 

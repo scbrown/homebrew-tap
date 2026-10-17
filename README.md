@@ -37,7 +37,8 @@ brew unpin quipu
 
 ## Caboodle preview channel
 
-`caboodle@nightly` is an opt-in preview built daily from an exact `scbrown/tambo`
+Homebrew uses `caboodle-nightly` (rather than a nonnumeric `@nightly` suffix).
+`caboodle-nightly` is an opt-in preview built daily from an exact `scbrown/tambo`
 main commit. Both macOS architectures run the upstream tests and build before
 an immutable prerelease is published here. Its version includes the UTC build
 time and source commit; `NIGHTLY-SOURCE.json` records the version-only build
@@ -47,17 +48,17 @@ The stable generator excludes prereleases.
 After the first successful nightly publication, switch with:
 
 ```sh
-brew unlink caboodle && brew install scbrown/tap/caboodle@nightly
+brew unlink caboodle && brew install scbrown/tap/caboodle-nightly
 ```
 
 Return to an already installed stable formula with:
 
 ```sh
-brew unlink caboodle@nightly && brew link caboodle
+brew unlink caboodle-nightly && brew link caboodle
 ```
 
-Hold the installed preview through upgrades with `brew pin caboodle@nightly`;
-resume with `brew unpin caboodle@nightly`. Other formulas currently offer the
+Hold the installed preview through upgrades with `brew pin caboodle-nightly`;
+resume with `brew unpin caboodle-nightly`. Other formulas currently offer the
 stable and pinned channels. A preview is never selected by the stable Mac stack
 consumer: installing a preview is an explicit user choice.
 
@@ -66,7 +67,7 @@ consumer: installing a preview is an explicit user choice.
 ```sh
 python3 scripts/generate.py --check   # report drift without writing
 python3 scripts/generate.py quipu     # regenerate one formula
-python3 scripts/generate.py --preview caboodle@nightly
+python3 scripts/generate.py --preview caboodle-nightly
 python3 scripts/test-nightly.py       # offline release/source admission controls
 ```
 

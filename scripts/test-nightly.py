@@ -54,15 +54,18 @@ class ReleaseControls(unittest.TestCase):
 
     def test_preview_class_and_version_readback(self):
         self.assertEqual(generate.class_name("caboodle"), "Caboodle")
-        self.assertEqual(generate.class_name("caboodle@nightly"), "CaboodleATnightly")
+        self.assertEqual(generate.class_name("caboodle-nightly"), "CaboodleNightly")
+        self.assertEqual(generate.class_name("caboodle@0.3"), "CaboodleAT03")
+        with self.assertRaises(generate.Refused):
+            generate.class_name("caboodle@nightly")
         row = {"desc": "Nightly Caboodle", "repo": "a/b", "bins": ["caboodle"],
                "license": "MIT", "version_args": "--version", "explicit_version": True,
                "conflicts_with": "caboodle"}
         version = "0.3.7-nightly.20261017010000.bbbbbbbbbbbb"
-        text = generate.render("caboodle@nightly", row, version,
+        text = generate.render("caboodle-nightly", row, version,
                                [("macos-arm", "https://example.test/arm", "a" * 64),
                                 ("macos-intel", "https://example.test/intel", "b" * 64)])
-        self.assertIn("class CaboodleATnightly < Formula", text)
+        self.assertIn("class CaboodleNightly < Formula", text)
         self.assertIn(f'version "{version}"', text)
         self.assertIn('conflicts_with "caboodle"', text)
         self.assertIn("assert_match version.to_s", text)
@@ -129,7 +132,7 @@ class CandidateControls(unittest.TestCase):
             self.archive(assets, "aarch64-apple-darwin")
             self.archive(assets, "x86_64-apple-darwin")
             text = candidate.candidate(self.root, assets, self.version, self.sha)
-            self.assertIn("CaboodleATnightly", text)
+            self.assertIn("CaboodleNightly", text)
             self.assertEqual(text.count("file://"), 2)
             self.archive(assets, "x86_64-apple-darwin", "b" * 40)
             with self.assertRaisesRegex(ValueError, "source identity mismatch"):

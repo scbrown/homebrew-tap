@@ -19,7 +19,7 @@ def candidate(root, assets, version, sha):
     if not re.fullmatch(r"\d+\.\d+\.\d+-nightly\.\d{14}\." + sha[:12], version):
         raise ValueError("candidate version does not identify the selected source")
     manifest = json.loads((root / "manifest.json").read_text())
-    row = manifest["previews"]["caboodle@nightly"]
+    row = manifest["previews"]["caboodle-nightly"]
     rows = []
     for platform, values in manifest["platforms"].items():
         archive = assets / row["asset"].format(ver=version, **values)
@@ -34,7 +34,7 @@ def candidate(root, assets, version, sha):
         if source.get("source_sha") != sha or source.get("version") != version:
             raise ValueError("candidate archive source identity mismatch")
         rows.append((platform, archive.resolve().as_uri(), digest))
-    return generate.render("caboodle@nightly", row, version, rows)
+    return generate.render("caboodle-nightly", row, version, rows)
 
 
 if __name__ == "__main__":
@@ -45,4 +45,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     text = candidate(root, args.assets, args.version, args.sha)
-    (root / "Formula/caboodle@nightly.rb").write_text(text)
+    (root / "Formula/caboodle-nightly.rb").write_text(text)

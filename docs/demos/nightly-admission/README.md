@@ -2,7 +2,7 @@
 
 Run `python3 scripts/demo-nightly.py` from a clone with the baseline commit
 available. [The transcript](output.log) shows the previously invalid preview
-class name becoming `CaboodleATnightly`, with the stable class and stable release
+`caboodle@nightly` spelling replaced by `caboodle-nightly` / `CaboodleNightly`, with the stable class and stable release
 selection kept as positive controls. The preview selects only a published,
 timestamped prerelease tied to a source commit.
 
