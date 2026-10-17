@@ -24,7 +24,8 @@
         "caboodle"
       ],
       "license": "MIT",
-      "version_args": "--version"
+      "version_args": "--version",
+      "conflicts_with": "caboodle-nightly"
     },
     "desire-path": {
       "repo": "scbrown/desire-path",

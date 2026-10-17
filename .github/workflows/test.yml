@@ -50,6 +50,10 @@ jobs:
         run: |
           set -u
           failed=""
+          # Conflict checks load both formulas before either is installed.
+          for f in Formula/*.rb; do
+            brew trust --formula "scbrown/tap/$(basename "$f" .rb)" || exit 1
+          done
           for f in Formula/*.rb; do
             name="$(basename "$f" .rb)"
             echo "::group::$name"
