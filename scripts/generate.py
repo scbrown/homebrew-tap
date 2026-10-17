@@ -57,6 +57,18 @@ def latest_stable(repo, prefix):
     return max(stable, key=lambda r: tuple(int(x) for x in r["tag_name"][len(prefix):].split(".")))
 
 
+def latest_preview(repo, prefix):
+    """Only explicitly published, immutable nightly prereleases enter this lane."""
+    releases = get(f"{API}/repos/{repo}/releases?per_page=30")
+    previews = [r for r in releases if not r["draft"] and r["prerelease"]
+                and r["tag_name"].startswith(prefix)
+                and re.fullmatch(r"\d+\.\d+\.\d+-nightly\.\d{14}\.[0-9a-f]{12}",
+                                 r["tag_name"][len(prefix):])]
+    if not previews:
+        raise Refused(f"{repo}: no published nightly release with prefix {prefix!r}")
+    return max(previews, key=lambda r: r["tag_name"][len(prefix):].split("-nightly.")[1])
+
+
 def parse_sums(text):
     sums = {}
     for line in text.splitlines():
@@ -71,7 +83,8 @@ def resolve(name, row, platforms, blobs=None):
 
     When ``blobs`` is a dict, the verified bytes of each asset are kept in it.
     """
-    release = latest_stable(row["repo"], row["tag_prefix"])
+    select = latest_preview if row.get("channel") == "nightly" else latest_stable
+    release = select(row["repo"], row["tag_prefix"])
     tag = release["tag_name"]
     ver = tag[len(row["tag_prefix"]):]
     assets = {a["name"]: a for a in release["assets"]}
@@ -234,7 +247,9 @@ def render_wheels(name, row, ver, rows, scripts, deps):
 
 
 def class_name(name):
-    return "".join(part.capitalize() for part in re.split(r"[-_]", name))
+    base, sep, version = name.partition("@")
+    return "".join(part.capitalize() for part in re.split(r"[-_]", base)) + (
+        "AT" + version.replace(".", "") if sep else "")
 
 
 def render(name, row, ver, rows):
@@ -247,7 +262,7 @@ def render(name, row, ver, rows):
     ]
     lines += [
         f'  desc "{row["desc"]}"',
-        f'  homepage "https://github.com/{row["repo"]}"',
+        f'  homepage "https://github.com/{row.get("homepage_repo", row["repo"])}"',
     ]
     if row.get("kind") == "python":
         # Pure-python wheel with no dependencies: unpack it and call its entry
@@ -283,6 +298,8 @@ def render(name, row, ver, rows):
         lines += [
             *([f'  version "{ver}"'] if row.get("explicit_version") else []),
             f'  license "{row["license"]}"',
+            *([f'  conflicts_with "{row["conflicts_with"]}", because: "both install the same commands"']
+              if row.get("conflicts_with") else []),
             "",
             "  on_macos do",
             "    on_arm do",
@@ -326,12 +343,15 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("names", nargs="*", help="formulas to regenerate (default: all)")
     parser.add_argument("--check", action="store_true", help="report drift; write nothing")
+    parser.add_argument("--preview", action="store_true",
+                        help="select opt-in preview formulas instead of stable formulas")
     args = parser.parse_args(argv)
     manifest = json.loads((ROOT / "manifest.json").read_text())
-    names = args.names or sorted(manifest["formulas"])
+    formulas = manifest.get("previews", {}) if args.preview else manifest["formulas"]
+    names = args.names or sorted(formulas)
     failed = changed = 0
     for name in names:
-        row = manifest["formulas"][name]
+        row = formulas[name]
         path = ROOT / "Formula" / f"{name}.rb"
         try:
             blobs = {}

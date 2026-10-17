@@ -1,0 +1,196 @@
+name: Caboodle nightly
+
+# arming: ci — builds an exact upstream main commit on both macOS architectures.
+# PRs prove the candidate but cannot publish or change the tap.
+on:
+  schedule:
+    - cron: "41 3 * * *"
+  pull_request:
+    paths:
+      - .github/workflows/nightly.yml
+      - scripts/prepare-nightly.py
+      - scripts/render-nightly-candidate.py
+      - scripts/generate.py
+      - scripts/test-nightly.py
+      - manifest.json
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/nightly.yml
+      - scripts/prepare-nightly.py
+      - scripts/render-nightly-candidate.py
+      - scripts/generate.py
+      - manifest.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: caboodle-nightly-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
+  cancel-in-progress: false
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.pin.outputs.sha }}
+      version: ${{ steps.pin.outputs.version }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          persist-credentials: false
+      - run: python3 scripts/test-nightly.py
+      - name: Resolve the immutable main source
+        id: pin
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          sha="$(gh api repos/scbrown/tambo/commits/main --jq .sha)"
+          base="$(gh api "repos/scbrown/tambo/contents/Cargo.toml?ref=$sha" --jq .content | python3 -c 'import base64,sys,tomllib; print(tomllib.loads(base64.b64decode(sys.stdin.read()).decode())["package"]["version"])')"
+          python3 -c 'import re,sys; assert re.fullmatch(r"[0-9a-f]{40}",sys.argv[1]); assert re.fullmatch(r"\d+\.\d+\.\d+",sys.argv[2])' "$sha" "$base"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "version=$base-nightly.$(date -u +%Y%m%d%H%M%S).${sha:0:12}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: source
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14
+            target: aarch64-apple-darwin
+          - os: macos-15-intel
+            target: x86_64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          path: tap
+          persist-credentials: false
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          repository: scbrown/tambo
+          ref: ${{ needs.source.outputs.sha }}
+          path: source
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
+        with:
+          toolchain: "1.98.1"
+          targets: ${{ matrix.target }}
+      - name: Apply the recorded version-only patch
+        env:
+          SOURCE_SHA: ${{ needs.source.outputs.sha }}
+          VERSION: ${{ needs.source.outputs.version }}
+        run: python3 tap/scripts/prepare-nightly.py source "$SOURCE_SHA" "$VERSION"
+      - name: Test and build the exact candidate
+        working-directory: source
+        env:
+          VERSION: ${{ needs.source.outputs.version }}
+        run: |
+          set -eu
+          cargo test --locked --all-targets
+          cargo build --locked --release --bins
+          target/release/caboodle --version | grep -F "$VERSION"
+      - name: Archive the verified candidate
+        working-directory: source
+        env:
+          VERSION: ${{ needs.source.outputs.version }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          set -eu
+          mkdir ../dist
+          cp NIGHTLY-SOURCE.json target/release/
+          archive="caboodle-v${VERSION}-${TARGET}.tar.gz"
+          tar -C target/release -czf "../dist/$archive" caboodle tambo NIGHTLY-SOURCE.json
+          cd ../dist
+          shasum -a 256 "$archive" > "$archive.sha256"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nightly-${{ matrix.target }}
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: [source, build]
+    runs-on: macos-14
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: nightly-*
+          merge-multiple: true
+          path: dist
+      - name: Verify both archives before publication
+        run: |
+          set -eu
+          cd dist
+          test "$(find . -name '*.tar.gz' | wc -l | tr -d ' ')" = 2
+          shasum -a 256 -c ./*.sha256
+      - name: Install and verify the candidate
+        env:
+          VERSION: ${{ needs.source.outputs.version }}
+          SOURCE_SHA: ${{ needs.source.outputs.sha }}
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
+        run: |
+          set -eu
+          python3 scripts/render-nightly-candidate.py dist "$VERSION" "$SOURCE_SHA"
+          taps="$(brew --repository)/Library/Taps/scbrown"
+          mkdir -p "$taps"
+          ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
+          brew install scbrown/tap/caboodle@nightly
+          brew test scbrown/tap/caboodle@nightly
+          scripts/check-installed.py scbrown/tap/caboodle@nightly
+          brew uninstall scbrown/tap/caboodle@nightly
+      - name: Publish an immutable prerelease
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.source.outputs.version }}
+          SOURCE_SHA: ${{ needs.source.outputs.sha }}
+        run: |
+          gh release create "caboodle-nightly-v$VERSION" dist/* --prerelease \
+            --target "$GITHUB_SHA" --title "Caboodle nightly $VERSION" \
+            --notes "Built from scbrown/tambo commit $SOURCE_SHA. NIGHTLY-SOURCE.json records the version-only build patch. Both macOS builds and tests passed; stable formulas do not select prereleases."
+      - name: Generate and test the opt-in formula
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
+        run: |
+          set -eu
+          python3 scripts/generate.py --preview caboodle@nightly
+          unset GITHUB_TOKEN
+          brew install scbrown/tap/caboodle@nightly
+          brew test scbrown/tap/caboodle@nightly
+          brew audit --strict scbrown/tap/caboodle@nightly
+          scripts/check-installed.py scbrown/tap/caboodle@nightly
+      - name: Commit the tested preview formula
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add Formula/caboodle@nightly.rb
+          git commit -m 'formula: update verified Caboodle nightly'
+          gh auth setup-git
+          # A concurrent main move refuses this push; never force the formula.
+          git push origin HEAD:main
+      - name: Attach both-architecture checks to the new main
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh workflow run test.yml --ref main

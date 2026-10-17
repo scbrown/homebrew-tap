@@ -127,5 +127,23 @@
       "os": "darwin",
       "arch": "amd64"
     }
+  },
+  "previews": {
+    "caboodle@nightly": {
+      "repo": "scbrown/homebrew-tap",
+      "homepage_repo": "scbrown/tambo",
+      "desc": "Nightly Caboodle built from an exact main commit",
+      "channel": "nightly",
+      "tag_prefix": "caboodle-nightly-v",
+      "asset": "caboodle-v{ver}-{triple}.tar.gz",
+      "sums": "sidecar",
+      "bins": [
+        "caboodle"
+      ],
+      "license": "MIT",
+      "version_args": "--version",
+      "explicit_version": true,
+      "conflicts_with": "caboodle"
+    }
   }
 }
