@@ -11,7 +11,7 @@
         "bobbin"
       ],
       "libexec": true,
-      "license": "MIT",
+      "license": "Apache-2.0",
       "version_args": "--version"
     },
     "caboodle": {
@@ -49,7 +49,7 @@
         "quipu",
         "quipu-server"
       ],
-      "license": "MIT",
+      "license": "Apache-2.0",
       "version_args": "--version",
       "links": {
         "qp": "quipu"
@@ -76,7 +76,7 @@
       "bins": [
         "yupana"
       ],
-      "license": "MIT",
+      "license": "Apache-2.0",
       "version_args": "--version",
       "links": {
         "hank": "yupana"

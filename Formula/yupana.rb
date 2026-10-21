@@ -5,7 +5,7 @@
 class Yupana < Formula
   desc "Live per-tenant code structure: symbols, callers and impact"
   homepage "https://github.com/scbrown/yupana"
-  license "MIT"
+  license "Apache-2.0"
 
   on_macos do
     on_arm do
