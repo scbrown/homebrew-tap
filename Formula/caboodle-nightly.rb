@@ -5,18 +5,18 @@
 class CaboodleNightly < Formula
   desc "Nightly Caboodle built from an exact main commit"
   homepage "https://github.com/scbrown/tambo"
-  version "0.3.7-nightly.20261019091838.70199b472793"
+  version "0.5.0-nightly.20261021072458.6db210909578"
   license "MIT"
   conflicts_with "caboodle", because: "both install the same commands"
 
   on_macos do
     on_arm do
-      url "https://github.com/scbrown/homebrew-tap/releases/download/caboodle-nightly-v0.3.7-nightly.20261019091838.70199b472793/caboodle-v0.3.7-nightly.20261019091838.70199b472793-aarch64-apple-darwin.tar.gz"
-      sha256 "98c8455cd71c45311ed8a771b69c40f0a66b6844f6f24f41c7da35b0a271dc09"
+      url "https://github.com/scbrown/homebrew-tap/releases/download/caboodle-nightly-v0.5.0-nightly.20261021072458.6db210909578/caboodle-v0.5.0-nightly.20261021072458.6db210909578-aarch64-apple-darwin.tar.gz"
+      sha256 "d0539c0da4a53f71a05ca14f480bc29667a2154bd570c4c37d520b6025e77456"
     end
     on_intel do
-      url "https://github.com/scbrown/homebrew-tap/releases/download/caboodle-nightly-v0.3.7-nightly.20261019091838.70199b472793/caboodle-v0.3.7-nightly.20261019091838.70199b472793-x86_64-apple-darwin.tar.gz"
-      sha256 "f1f75056fea661489a1521682556b3709bdf2c0b079da20c9c2d243b92ef7a75"
+      url "https://github.com/scbrown/homebrew-tap/releases/download/caboodle-nightly-v0.5.0-nightly.20261021072458.6db210909578/caboodle-v0.5.0-nightly.20261021072458.6db210909578-x86_64-apple-darwin.tar.gz"
+      sha256 "3902b27b680346e77b7969527ae9aef66410c549da88a2c19b65dae99085b835"
     end
   end
 
