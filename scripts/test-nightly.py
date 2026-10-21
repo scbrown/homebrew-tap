@@ -10,6 +10,9 @@ import hashlib
 import io
 import json
 import tarfile
+import os
+import sys
+import textwrap
 
 spec = importlib.util.spec_from_file_location("generate", __file__.replace("test-nightly.py", "generate.py"))
 generate = importlib.util.module_from_spec(spec)
@@ -27,6 +30,53 @@ def release(tag, prerelease=False, draft=False):
 
 
 class ReleaseControls(unittest.TestCase):
+    def test_update_trusts_conflict_peers_before_install_and_preserves_failures(self):
+        workflow = Path(__file__).resolve().parents[1] / '.github/workflows/update.yml'
+        section = workflow.read_text().split('      - name: Install, test and audit changed formulas\n', 1)[1]
+        block = section.split('        run: |\n', 1)[1].split('      - name: Commit\n', 1)[0]
+        command = textwrap.dedent(block)
+        for failure in ('', 'trust', 'audit'):
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary); tools = root / 'bin'; tools.mkdir()
+                (root / 'Formula').mkdir()
+                for name in ('caboodle', 'caboodle-nightly'):
+                    (root / 'Formula' / (name + '.rb')).write_text('# private fixture\n')
+                brew = tools / 'brew'
+                brew.write_text('#!' + sys.executable + '\n' + r"""
+import os, sys, pathlib, json
+root = pathlib.Path(os.environ['FIXTURE'])
+args = sys.argv[1:]
+if args == ['--repository']:
+    print(root / 'brew'); sys.exit(0)
+with (root / 'calls').open('a') as log: log.write(json.dumps(args) + '\n')
+if args[0] == 'trust':
+    if os.environ['FAILURE'] == 'trust': sys.exit(17)
+    with (root / 'trusted').open('a') as stream: stream.write(args[-1] + '\n')
+if args[0] == 'install':
+    trusted = (root / 'trusted').read_text().splitlines() if (root / 'trusted').exists() else []
+    if 'scbrown/tap/caboodle-nightly' not in trusted:
+        print('untrusted conflict peer', file=sys.stderr); sys.exit(18)
+if args[0] == 'audit' and os.environ['FAILURE'] == 'audit': sys.exit(19)
+""")
+                brew.chmod(0o755)
+                git = tools / 'git'
+                git.write_text('#!/bin/sh\nif [ "$1" = diff ]; then echo Formula/caboodle.rb; fi\n')
+                git.chmod(0o755)
+                env = os.environ | {'PATH': str(tools) + os.pathsep + os.environ['PATH'],
+                                    'FIXTURE': str(root), 'FAILURE': failure, 'GITHUB_WORKSPACE': str(root)}
+                result = subprocess.run(['bash', '-c', command], cwd=root, env=env, capture_output=True, text=True)
+                calls = [json.loads(line) for line in (root / 'calls').read_text().splitlines()]
+                if failure == 'trust':
+                    self.assertNotEqual(result.returncode, 0)
+                    self.assertFalse(any(call[0] == 'install' for call in calls))
+                else:
+                    self.assertEqual(result.returncode, 19 if failure == 'audit' else 0, result.stderr)
+                    first_install = next(i for i, call in enumerate(calls) if call[0] == 'install')
+                    self.assertEqual({call[-1] for call in calls[:first_install] if call[0] == 'trust'},
+                                     {'scbrown/tap/caboodle', 'scbrown/tap/caboodle-nightly'})
+                    self.assertIn(['test', 'scbrown/tap/caboodle'], calls)
+                    self.assertIn(['audit', '--strict', 'scbrown/tap/caboodle'], calls)
+
     def test_empty_brew_fixture_is_read_only(self):
         fixture = Path(__file__).with_name("empty-brew-fixture.sh")
         self.assertEqual(subprocess.run(["sh", str(fixture), "update", "--quiet"], capture_output=True).returncode, 0)

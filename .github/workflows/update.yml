@@ -55,6 +55,10 @@ jobs:
           taps="$(brew --repository)/Library/Taps/scbrown"
           mkdir -p "$taps"
           ln -s "$GITHUB_WORKSPACE" "$taps/homebrew-tap"
+          # Conflict checks also load unchanged peers before installation.
+          for f in Formula/*.rb; do
+            brew trust --formula "scbrown/tap/$(basename "$f" .rb)"
+          done
           for f in $(git diff --name-only -- Formula; git ls-files --others -- Formula); do
             name="$(basename "$f" .rb)"
             brew install "scbrown/tap/$name"
