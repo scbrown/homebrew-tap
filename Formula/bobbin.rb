@@ -5,7 +5,7 @@
 class Bobbin < Formula
   desc "Repo indexing and context injection for AI agents"
   homepage "https://github.com/scbrown/bobbin"
-  license "MIT"
+  license "Apache-2.0"
 
   on_macos do
     on_arm do
