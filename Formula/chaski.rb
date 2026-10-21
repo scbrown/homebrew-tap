@@ -5,8 +5,8 @@
 class Chaski < Formula
   desc "Reactions and notifications when your knowledge graph changes"
   homepage "https://github.com/scbrown/chaski"
-  url "https://github.com/scbrown/chaski/releases/download/v0.1.0/chaski_reactor-0.1.0-py3-none-any.whl", using: :nounzip
-  sha256 "758f08de2a26d093fd5c234205f220a70312f80c459d622ed68ff6a946081b56"
+  url "https://github.com/scbrown/chaski/releases/download/v0.2.0/chaski_reactor-0.2.0-py3-none-any.whl", using: :nounzip
+  sha256 "2098db36157249c9301374e26b7d2be83d5f461bb61a4a237bc89f5e27c369ce"
   license "Apache-2.0"
 
   depends_on "python@3.12"
@@ -48,12 +48,18 @@ class Chaski < Formula
       PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from once import main; sys.exit(main())" "$@"
     SH
     chmod 0755, bin/"chaski-once"
+    (bin/"chaski-state-key-migrate").write <<~SH
+      #!/bin/bash
+      PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from state_key_migration import main; sys.exit(main())" "$@"
+    SH
+    chmod 0755, bin/"chaski-state-key-migrate"
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/chaski --version")
     system bin/"chaski-event", "--help"
     system bin/"chaski-once", "--help"
+    system bin/"chaski-state-key-migrate", "--help"
     system Formula["python@3.12"].opt_bin/"python3.12", "-c", "import sys; sys.path.insert(0, '#{libexec}/site'); import yaml"
   end
 end
