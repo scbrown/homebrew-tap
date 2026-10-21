@@ -4,18 +4,19 @@ Homebrew formulas for the agent tool stack: prebuilt macOS archives for Apple
 silicon and Intel, each pinned to the sha256 its own release publishes.
 
 ```sh
-brew install scbrown/tap/caboodle
+brew install scbrown/tap/tambo
 ```
 
 | Formula | Commands | Source |
 | --- | --- | --- |
 | `bobbin` | `bobbin` | [scbrown/bobbin](https://github.com/scbrown/bobbin) |
-| `caboodle` | `caboodle` | [scbrown/caboodle](https://github.com/scbrown/caboodle) |
-| `chaski` | `chaski`, `chaski-event`, `chaski-once` | [scbrown/chaski](https://github.com/scbrown/chaski) |
+| `caboodle` | `caboodle` (the former name of `tambo`) | [scbrown/tambo](https://github.com/scbrown/tambo) |
+| `chaski` | `chaski`, `chaski-event`, `chaski-once` | [intigraph/chaski](https://github.com/intigraph/chaski) |
 | `desire-path` | `dp` | [scbrown/desire-path](https://github.com/scbrown/desire-path) |
 | `quipu` | `quipu`, `quipu-server`, `qp` | [scbrown/quipu](https://github.com/scbrown/quipu) |
 | `seeds` | `sd` | [scbrown/seeds](https://github.com/scbrown/seeds) |
 | `shantytown` | `st` | [scbrown/shantytown](https://github.com/scbrown/shantytown) |
+| `tambo` | `tambo` | [scbrown/tambo](https://github.com/scbrown/tambo) |
 | `yupana` | `yupana`, `hank` | [scbrown/yupana](https://github.com/scbrown/yupana) |
 
 ## How formulas stay current
