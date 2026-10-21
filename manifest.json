@@ -97,7 +97,7 @@
       "entry": "shantytown.cli:main"
     },
     "chaski": {
-      "repo": "scbrown/chaski",
+      "repo": "intigraph/chaski",
       "desc": "Reactions and notifications when your knowledge graph changes",
       "kind": "python-wheels",
       "tag_prefix": "v",
