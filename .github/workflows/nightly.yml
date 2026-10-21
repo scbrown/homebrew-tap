@@ -87,6 +87,13 @@ jobs:
           SOURCE_SHA: ${{ needs.source.outputs.sha }}
           VERSION: ${{ needs.source.outputs.version }}
         run: python3 tap/scripts/prepare-nightly.py source "$SOURCE_SHA" "$VERSION"
+      - name: Install the candidate's macOS prerequisites
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: |
+          set -eu
+          brew install coreutils
+          echo "$(brew --prefix coreutils)/libexec/gnubin" >> "$GITHUB_PATH"
       - name: Test and build the exact candidate
         working-directory: source
         env:
