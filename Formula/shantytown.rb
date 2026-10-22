@@ -5,7 +5,7 @@
 class Shantytown < Formula
   desc "Small harness for running a crew of coding agents"
   homepage "https://github.com/scbrown/shantytown"
-  url "https://github.com/scbrown/shantytown/releases/download/v0.7.1/shantytown-0.7.1-py3-none-any.whl", using: :nounzip
+  url "https://github.com/intigraph/shantytown/releases/download/v0.7.1/shantytown-0.7.1-py3-none-any.whl", using: :nounzip
   sha256 "32e2b656c852040eb62ff6c578e42a8d7275a908da4569aed659db56311fda7e"
   license "MIT"
 
