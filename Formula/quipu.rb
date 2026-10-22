@@ -9,12 +9,12 @@ class Quipu < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/scbrown/quipu/releases/download/quipu-ai-v0.15.0/quipu-quipu-ai-v0.15.0-aarch64-apple-darwin.tar.gz"
-      sha256 "53ec6d42832e5a38c4e62948170e8f5692eca46f6290eb1438b46f95cf9abfae"
+      url "https://github.com/scbrown/quipu/releases/download/quipu-ai-v0.16.0/quipu-quipu-ai-v0.16.0-aarch64-apple-darwin.tar.gz"
+      sha256 "2d718a9c18314f3672ac95d41ebe7b2edc2c8cf532ea7455bd268b1d1bba2018"
     end
     on_intel do
-      url "https://github.com/scbrown/quipu/releases/download/quipu-ai-v0.15.0/quipu-quipu-ai-v0.15.0-x86_64-apple-darwin.tar.gz"
-      sha256 "f3ea18abcf7733d51ec1880c9fe5bd3944ae03db77796255b15e186a822e0792"
+      url "https://github.com/scbrown/quipu/releases/download/quipu-ai-v0.16.0/quipu-quipu-ai-v0.16.0-x86_64-apple-darwin.tar.gz"
+      sha256 "9b401d200d9a1e0718d9b4307f3d089819775f091750324ef30734a2d8db55e5"
     end
   end
 
