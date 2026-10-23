@@ -9,12 +9,12 @@ class Yupana < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/yupana/releases/download/v0.15.4/yupana-v0.15.4-aarch64-apple-darwin.tar.gz"
-      sha256 "af1aa325340cfa97e331ab625b2bf5d3e5a068f3f73984147517edac4f744a97"
+      url "https://github.com/intigraph/yupana/releases/download/v0.16.0/yupana-v0.16.0-aarch64-apple-darwin.tar.gz"
+      sha256 "16fa169d1178562531b1116dda9cf695df486b2c564c33d75f597aa58983b989"
     end
     on_intel do
-      url "https://github.com/intigraph/yupana/releases/download/v0.15.4/yupana-v0.15.4-x86_64-apple-darwin.tar.gz"
-      sha256 "0ba7a788f1a46aad85ce643f4dace746f03efb17c400ef729b5f0d654ed6fd37"
+      url "https://github.com/intigraph/yupana/releases/download/v0.16.0/yupana-v0.16.0-x86_64-apple-darwin.tar.gz"
+      sha256 "deeae7ad85acfeb4183c0934ba42429d57013d6b13c1d818c6d2c8fc2b41ef69"
     end
   end
 
