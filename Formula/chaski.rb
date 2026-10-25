@@ -5,8 +5,8 @@
 class Chaski < Formula
   desc "Reactions and notifications when your knowledge graph changes"
   homepage "https://github.com/intigraph/chaski"
-  url "https://github.com/intigraph/chaski/releases/download/v0.2.3/chaski_reactor-0.2.3-py3-none-any.whl", using: :nounzip
-  sha256 "4e0078b664113e217c3468cf94ebfd6967b2d32527039f7d57e7851a933a6e68"
+  url "https://github.com/intigraph/chaski/releases/download/v0.2.4/chaski_reactor-0.2.4-py3-none-any.whl", using: :nounzip
+  sha256 "92bf2a99bd8c9e9f7fcf7b2c366fda9731148dbb0db16668c80428c68512d975"
   license "Apache-2.0"
 
   depends_on "python@3.12"
