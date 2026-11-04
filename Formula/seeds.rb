@@ -9,12 +9,12 @@ class Seeds < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/seeds/releases/download/seeds-ai-v0.11.1/sd-seeds-ai-v0.11.1-aarch64-apple-darwin.tar.gz"
-      sha256 "50a3454d8e2103a00bd0ce13ebc6609a282d055dac7aa1c65096cb7db354cef4"
+      url "https://github.com/intigraph/seeds/releases/download/seeds-ai-v0.12.0/sd-seeds-ai-v0.12.0-aarch64-apple-darwin.tar.gz"
+      sha256 "36ada259ca212e9a66af7b3c05757c202b022c144e68aeae3a5ab676e36bc939"
     end
     on_intel do
-      url "https://github.com/intigraph/seeds/releases/download/seeds-ai-v0.11.1/sd-seeds-ai-v0.11.1-x86_64-apple-darwin.tar.gz"
-      sha256 "96a191ba8355598e150f140ced06acff4aba1e578b1fc33e5a1a5c346ac7b052"
+      url "https://github.com/intigraph/seeds/releases/download/seeds-ai-v0.12.0/sd-seeds-ai-v0.12.0-x86_64-apple-darwin.tar.gz"
+      sha256 "93145df566844754a4e6f9ee17e6c697cc9f9305b6b8b22b5210399060e16270"
     end
   end
 
