@@ -15,7 +15,7 @@
       "version_args": "--version"
     },
     "caboodle": {
-      "repo": "scbrown/caboodle",
+      "repo": "scbrown/tambo",
       "desc": "Compose and verify the stack of agent tools",
       "tag_prefix": "v",
       "asset": "caboodle-{tag}-{triple}.tar.gz",
@@ -115,6 +115,18 @@
         "chaski-event",
         "chaski-once"
       ]
+    },
+    "tambo": {
+      "repo": "scbrown/tambo",
+      "desc": "Install, verify and update the Quipu stack of agent tools",
+      "tag_prefix": "v",
+      "asset": "tambo-{tag}-{triple}.tar.gz",
+      "sums": "sidecar",
+      "bins": [
+        "tambo"
+      ],
+      "license": "MIT",
+      "version_args": "--version"
     }
   },
   "platforms": {

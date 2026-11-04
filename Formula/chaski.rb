@@ -5,8 +5,8 @@
 class Chaski < Formula
   desc "Reactions and notifications when your knowledge graph changes"
   homepage "https://github.com/intigraph/chaski"
-  url "https://github.com/intigraph/chaski/releases/download/v0.2.4/chaski_reactor-0.2.4-py3-none-any.whl", using: :nounzip
-  sha256 "92bf2a99bd8c9e9f7fcf7b2c366fda9731148dbb0db16668c80428c68512d975"
+  url "https://github.com/intigraph/chaski/releases/download/v0.3.0/chaski_reactor-0.3.0-py3-none-any.whl", using: :nounzip
+  sha256 "7a92dd6df6f6fde5657e288ee7736d6077e4bd4fccb321cafd5d1345b6f9e564"
   license "Apache-2.0"
 
   depends_on "python@3.12"
@@ -43,6 +43,16 @@ class Chaski < Formula
       PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from external_event import main; sys.exit(main())" "$@"
     SH
     chmod 0755, bin/"chaski-event"
+    (bin/"chaski-github-routes").write <<~SH
+      #!/bin/bash
+      PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from github_routes import main; sys.exit(main())" "$@"
+    SH
+    chmod 0755, bin/"chaski-github-routes"
+    (bin/"chaski-github-work").write <<~SH
+      #!/bin/bash
+      PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from github_work import main; sys.exit(main())" "$@"
+    SH
+    chmod 0755, bin/"chaski-github-work"
     (bin/"chaski-once").write <<~SH
       #!/bin/bash
       PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from once import main; sys.exit(main())" "$@"
@@ -58,6 +68,8 @@ class Chaski < Formula
   test do
     assert_match version.to_s, shell_output("#{bin}/chaski --version")
     system bin/"chaski-event", "--help"
+    system bin/"chaski-github-routes", "--help"
+    system bin/"chaski-github-work", "--help"
     system bin/"chaski-once", "--help"
     system bin/"chaski-state-key-migrate", "--help"
     system Formula["python@3.12"].opt_bin/"python3.12", "-c", "import sys; sys.path.insert(0, '#{libexec}/site'); import yaml"
