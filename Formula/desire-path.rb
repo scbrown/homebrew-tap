@@ -9,12 +9,12 @@ class DesirePath < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/desire-path/releases/download/v0.12.1/desire-path_0.12.1_darwin_arm64.tar.gz"
-      sha256 "3ff6c172f213ac5f10e501951cce675f5cff3ff1dcee0c43599dcef84fe606fc"
+      url "https://github.com/intigraph/desire-path/releases/download/v0.12.2/desire-path_0.12.2_darwin_arm64.tar.gz"
+      sha256 "a7bce8c801dc0def3ed28d458ee86e4b305065c62953c38360bb3e9b15b10f5c"
     end
     on_intel do
-      url "https://github.com/intigraph/desire-path/releases/download/v0.12.1/desire-path_0.12.1_darwin_amd64.tar.gz"
-      sha256 "30e00e8d547f4db676564ab30187d75826dfe788955310aa9af9ad85fd785b7f"
+      url "https://github.com/intigraph/desire-path/releases/download/v0.12.2/desire-path_0.12.2_darwin_amd64.tar.gz"
+      sha256 "109bebc40d57ad7d73334dc2d302b7f1b70069cd0e04e9f0fcf0167584b4b3b3"
     end
   end
 
