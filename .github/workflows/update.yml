@@ -2,7 +2,9 @@ name: update
 
 # Hourly: regenerate formulas from each repo's latest stable release (assets
 # verified against the release's own checksums), test them on macOS, and commit.
-# Uses only this repository's token: no credentials live in the source repos.
+# Commits use only this repository's token. Source repos may hold a dispatch-only
+# token that sends `stack-release` after a published release (aegis-em2); that
+# only starts this run early, and the schedule stays as reconciliation.
 on:
   # The first schedule (minute 17) never fired: zero schedule runs from 23:41Z to
   # 03:33Z although the workflow was active. Editing the cron re-registers it;
@@ -10,6 +12,12 @@ on:
   schedule:
     - cron: "23 * * * *"
   workflow_dispatch:
+  # Sent by a source repo's release workflow once a release is published. The
+  # payload (repo, tag) is informational only: generate.py still regenerates
+  # every formula from each repo's latest stable release, and no payload value
+  # reaches a shell command, checkout ref or URL.
+  repository_dispatch:
+    types: [stack-release]
 
 permissions:
   contents: write
@@ -26,6 +34,18 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Record the release that triggered this run
+        if: github.event_name == 'repository_dispatch'
+        env:
+          SRC_REPO: ${{ github.event.client_payload.repo }}
+          SRC_TAG: ${{ github.event.client_payload.tag }}
+        run: |
+          if [[ "$SRC_REPO" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]] &&
+             [[ "$SRC_TAG" =~ ^([A-Za-z0-9]+-)*v[0-9]+\.[0-9]+\.[0-9]+([-+][0-9A-Za-z.-]+)?$ ]]; then
+            echo "stack-release from $SRC_REPO $SRC_TAG"
+          else
+            echo "stack-release with an unrecognised payload (not logged)"
+          fi
       - name: Regenerate formulas
         id: gen
         env:
