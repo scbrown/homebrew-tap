@@ -33,7 +33,14 @@ jobs:
   update:
     runs-on: macos-latest
     steps:
+      # A run queued behind another in the `update` group would otherwise check
+      # out the commit that was main's head when its event fired. If the run
+      # ahead pushed a bump, the queued run rebuilt the same bump on the stale
+      # base and its push was rejected (run 43305335182). Reading main at start
+      # time lets it see the bump and exit with no change. The ref is a constant.
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Record the release that triggered this run
         if: github.event_name == 'repository_dispatch'
         env:
