@@ -18,6 +18,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Stable and nightly admission controls
         run: python3 scripts/test-nightly.py
+      - name: Release lag controls (offline)
+        run: python3 scripts/test-release-lag.py
       - name: Formulas match the latest verified releases
         env:
           GITHUB_TOKEN: ${{ github.token }}

@@ -30,6 +30,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  release-lag:
+    name: Stable formula lag (2h)
+    needs: update
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Compare stable releases with committed formulas
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/check-release-lag.py
+
   update:
     runs-on: macos-latest
     steps:
