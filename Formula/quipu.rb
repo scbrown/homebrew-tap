@@ -9,12 +9,12 @@ class Quipu < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/quipu/releases/download/quipu-ai-v0.19.3/quipu-quipu-ai-v0.19.3-aarch64-apple-darwin.tar.gz"
-      sha256 "f2d93e6c636c19c86e8ee38ac032212b2381ebf5e163ce9a78ab6d645178383e"
+      url "https://github.com/intigraph/quipu/releases/download/quipu-ai-v0.19.4/quipu-quipu-ai-v0.19.4-aarch64-apple-darwin.tar.gz"
+      sha256 "e80b2eb5710e09436e830a51c37c74122b6b53fde4560bc20e4ca5106d52d8e2"
     end
     on_intel do
-      url "https://github.com/intigraph/quipu/releases/download/quipu-ai-v0.19.3/quipu-quipu-ai-v0.19.3-x86_64-apple-darwin.tar.gz"
-      sha256 "392c3e32aeefeaec5d6b3b78a1855efb90f0a8be8a6a370a4154e7becc5cb501"
+      url "https://github.com/intigraph/quipu/releases/download/quipu-ai-v0.19.4/quipu-quipu-ai-v0.19.4-x86_64-apple-darwin.tar.gz"
+      sha256 "5f045af1c3d5cd162832dcdb2b28c1052c54f880fb1eb1b538b05fbecb0aa66d"
     end
   end
 
