@@ -5,8 +5,8 @@
 class Chaski < Formula
   desc "Reactions and notifications when your knowledge graph changes"
   homepage "https://github.com/intigraph/chaski"
-  url "https://github.com/intigraph/chaski/releases/download/v0.8.0/chaski_reactor-0.8.0-py3-none-any.whl", using: :nounzip
-  sha256 "ca98d6c464106db8cbd96412d90f189d829daa036faf6bcb291c15c74fc011de"
+  url "https://github.com/intigraph/chaski/releases/download/v0.9.0/chaski_reactor-0.9.0-py3-none-any.whl", using: :nounzip
+  sha256 "7acb9e47b1ca17873a039fc0d39093f0034aff474175035dee107506afb42fe1"
   license "Apache-2.0"
 
   depends_on "python@3.12"
@@ -63,6 +63,11 @@ class Chaski < Formula
       PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from emitter import disposition_main; sys.exit(disposition_main())" "$@"
     SH
     chmod 0755, bin/"chaski-outbox-disposition"
+    (bin/"chaski-recovery-migration").write <<~SH
+      #!/bin/bash
+      PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from recovery_migration import main; sys.exit(main())" "$@"
+    SH
+    chmod 0755, bin/"chaski-recovery-migration"
     (bin/"chaski-state-key-migrate").write <<~SH
       #!/bin/bash
       PYTHONPATH="#{site}" exec "#{python}" -c "import sys; from state_key_migration import main; sys.exit(main())" "$@"
@@ -77,6 +82,7 @@ class Chaski < Formula
     system bin/"chaski-github-work", "--help"
     system bin/"chaski-once", "--help"
     system bin/"chaski-outbox-disposition", "--help"
+    system bin/"chaski-recovery-migration", "--help"
     system bin/"chaski-state-key-migrate", "--help"
     system Formula["python@3.12"].opt_bin/"python3.12", "-c", "import sys; sys.path.insert(0, '#{libexec}/site'); import yaml"
   end
