@@ -10,12 +10,12 @@ class Caboodle < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/tambo/releases/download/v0.17.1/caboodle-v0.17.1-aarch64-apple-darwin.tar.gz"
-      sha256 "7ecf7537a540aa72930b2d32cbde1044a621a9f8a3d69270b586d2813f433073"
+      url "https://github.com/intigraph/tambo/releases/download/v0.17.2/caboodle-v0.17.2-aarch64-apple-darwin.tar.gz"
+      sha256 "5f0740caa6d7ef86aaaaaa0064f7b7333e074f280b65fa6588e57ad2e5833d52"
     end
     on_intel do
-      url "https://github.com/intigraph/tambo/releases/download/v0.17.1/caboodle-v0.17.1-x86_64-apple-darwin.tar.gz"
-      sha256 "fe45b218760f7786c9ea9c7aaa477733ef6a95cae818ae7f9738cbba6381e6ef"
+      url "https://github.com/intigraph/tambo/releases/download/v0.17.2/caboodle-v0.17.2-x86_64-apple-darwin.tar.gz"
+      sha256 "21bfbbb85d149db478281323a011832c3a9a276a1a589e40703ce8a68dae39f4"
     end
   end
 
