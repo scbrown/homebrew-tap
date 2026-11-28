@@ -9,12 +9,12 @@ class Bobbin < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/bobbin/releases/download/v0.38.0/bobbin-v0.38.0-aarch64-apple-darwin.tar.gz"
-      sha256 "1cba7b68cdbb6628539936f229bb8cdda273cbf50b55e9bbcbf1113d937333d9"
+      url "https://github.com/intigraph/bobbin/releases/download/v0.38.1/bobbin-v0.38.1-aarch64-apple-darwin.tar.gz"
+      sha256 "b535948238f9cc5d41acf31482fab20c20d7cce90b099d61f104d3ed52ef7319"
     end
     on_intel do
-      url "https://github.com/intigraph/bobbin/releases/download/v0.38.0/bobbin-v0.38.0-x86_64-apple-darwin.tar.gz"
-      sha256 "4558613761946d06f320ea9cc55eb49e46f28dad2bbcb90a0796013b95ba5628"
+      url "https://github.com/intigraph/bobbin/releases/download/v0.38.1/bobbin-v0.38.1-x86_64-apple-darwin.tar.gz"
+      sha256 "23d28997c694593350ea032f7c5243a62da62dd0f5ab032e56e250ee1ef4c46f"
     end
   end
 
