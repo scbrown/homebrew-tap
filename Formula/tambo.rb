@@ -9,12 +9,12 @@ class Tambo < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/intigraph/tambo/releases/download/v0.18.1/tambo-v0.18.1-aarch64-apple-darwin.tar.gz"
-      sha256 "55feb32abf8cf4ff863df534a1d88f32fcfde4f5c06c1c7dff55f03eb4521083"
+      url "https://github.com/intigraph/tambo/releases/download/v0.18.2/tambo-v0.18.2-aarch64-apple-darwin.tar.gz"
+      sha256 "5da83fd0962bbdd33f568074b96a150ca033c7fba2642087cee08f4679af0226"
     end
     on_intel do
-      url "https://github.com/intigraph/tambo/releases/download/v0.18.1/tambo-v0.18.1-x86_64-apple-darwin.tar.gz"
-      sha256 "80bcf56f67c46962659950241d4078ddff9957d0f6060e9dd451357348bddfed"
+      url "https://github.com/intigraph/tambo/releases/download/v0.18.2/tambo-v0.18.2-x86_64-apple-darwin.tar.gz"
+      sha256 "d21b3894d1c4d3fcdb48304539bcf55bd283f050d05cf96999cf2623a2a39511"
     end
   end
 
